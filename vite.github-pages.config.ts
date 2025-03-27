@@ -7,7 +7,15 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// This config is specifically for GitHub Pages deployment
+/**
+ * This config is specifically for GitHub Pages deployment
+ * 
+ * Key differences from the normal config:
+ * 1. Static site with no backend - game logic runs in browser
+ * 2. Uses relative paths for assets with base: './'
+ * 3. Outputs to a separate directory to avoid mixing with server code
+ * 4. Does not include server-side code or unnecessary build files
+ */
 export default defineConfig({
   plugins: [
     react(),
@@ -21,9 +29,18 @@ export default defineConfig({
     },
   },
   root: path.resolve(__dirname, "client"),
-  base: "./", // This is important for GitHub Pages to work with relative paths
+  // Use relative paths for GitHub Pages
+  base: "./", 
   build: {
     outDir: path.resolve(__dirname, "github-pages-build"),
     emptyOutDir: true,
+    // Ensure we generate a proper index.html at the root
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "client", "index.html"),
+      },
+    },
+    // Ensure all assets use relative URLs
+    assetsDir: "assets",
   },
 });
