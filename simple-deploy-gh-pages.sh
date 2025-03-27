@@ -4,7 +4,7 @@
 set -e
 
 # Repository name - Change this to your actual repository name
-REPO_NAME="4player-tictactoe"
+REPO_NAME="tictactoe"
 
 echo "=== Tic-tac-toe GitHub Pages Deployment ==="
 echo "Building the project using the GitHub Pages configuration..."
@@ -59,7 +59,7 @@ cat > gh-pages/README.md << EOF
 This is the GitHub Pages deployment of the 4-Player Tic-tac-toe game.
 The game is running in static mode without a server backend.
 
-Visit the main repository for the full source code.
+Visit the main repository at https://github.com/abdelrahmanmm/tictactoe for the full source code.
 EOF
 
 echo "Files are prepared in the gh-pages directory."
@@ -94,5 +94,4 @@ echo "   - Select 'Deploy from a branch' under Source"
 echo "   - Select 'gh-pages' branch and '/ (root)' folder"
 echo "   - Click Save"
 echo ""
-echo "Your site will be available at: https://yourusername.github.io/${REPO_NAME}/"
-echo "Replace 'yourusername' with your actual GitHub username in the URL above."
+echo "Your site will be available at: https://abdelrahmanmm.github.io/${REPO_NAME}/"
