@@ -121,7 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (game) {
             // Reset game state but keep scores
             const newState = {
-              board: Array(9).fill(null),
+              board: Array(25).fill(null),
               currentPlayerIndex: 0, // Always start with player 1
               gameActive: true,
               winner: null,
@@ -144,7 +144,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (game) {
             // Reset scores and game state
             const newState = {
-              board: Array(9).fill(null),
+              board: Array(25).fill(null),
               currentPlayerIndex: 0,
               gameActive: true,
               winner: null,

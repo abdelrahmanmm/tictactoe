@@ -62,11 +62,13 @@ export class MemStorage implements IStorage {
 
   checkForWin(board: (number | null)[]): number | null {
     for (const combo of WINNING_COMBINATIONS) {
-      const [a, b, c] = combo;
+      const [a, b, c, d, e] = combo;
       if (
         board[a] !== null &&
         board[a] === board[b] &&
-        board[a] === board[c]
+        board[a] === board[c] &&
+        board[a] === board[d] &&
+        board[a] === board[e]
       ) {
         return board[a];
       }

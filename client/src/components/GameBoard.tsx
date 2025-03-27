@@ -17,11 +17,11 @@ export default function GameBoard({ board, gameActive }: GameBoardProps) {
 
   return (
     <div className="board-container mx-auto">
-      <div className="grid grid-cols-3 gap-2 bg-gray-200 p-2 rounded-lg shadow-md">
+      <div className="grid grid-cols-5 gap-2 bg-gray-200 p-2 rounded-lg shadow-md">
         {board.map((cell, index) => (
           <div
             key={index}
-            className={`cell bg-white rounded-md flex items-center justify-center text-4xl font-bold cursor-pointer shadow-sm
+            className={`cell bg-white rounded-md flex items-center justify-center text-3xl font-bold cursor-pointer shadow-sm h-12 w-12
                       ${gameActive && cell === null ? 'hover:bg-gray-50' : ''}`}
             onClick={() => handleCellClick(index)}
           >
