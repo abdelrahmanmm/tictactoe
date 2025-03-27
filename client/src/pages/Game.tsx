@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useGame } from "@/contexts/GameContext";
+import { useState, useEffect } from "react";
+import { useGame, getGameState } from "@/contexts/GameContext";
 import GameBoard from "@/components/GameBoard";
 import CurrentPlayerIndicator from "@/components/CurrentPlayerIndicator";
 import PlayerScores from "@/components/PlayerScores";
@@ -9,9 +9,16 @@ import GameInstructions from "@/components/GameInstructions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { GameState } from "@shared/schema";
 
 export default function Game() {
   const { game, loading, error } = useGame();
+  const [isGitHubPages, setIsGitHubPages] = useState(false);
+
+  useEffect(() => {
+    // Check if running on GitHub Pages
+    setIsGitHubPages(window.location.hostname.includes('github.io'));
+  }, []);
 
   if (loading) {
     return <LoadingState />;
@@ -25,11 +32,14 @@ export default function Game() {
     return <ErrorState message="Game not found" />;
   }
 
+  // Get game state using helper function
+  const gameState = getGameState(game);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="mb-6 text-center">
         <h1 className="text-3xl font-bold text-indigo-600">4-Player Tic-Tac-Toe</h1>
-        <p className="mt-2 text-gray-600">First player to connect 3 of their symbols wins!</p>
+        <p className="mt-2 text-gray-600">First player to get 5 in a row wins!</p>
       </header>
 
       <div className="lg:flex lg:items-start lg:justify-center gap-8">
@@ -37,19 +47,19 @@ export default function Game() {
         <div className="mb-6 lg:mb-0">
           {/* Current Player Indicator */}
           <CurrentPlayerIndicator 
-            currentPlayerIndex={game.state.currentPlayerIndex}
-            gameActive={game.state.gameActive}
+            currentPlayerIndex={gameState.currentPlayerIndex}
+            gameActive={gameState.gameActive}
           />
 
           {/* Game Board */}
           <GameBoard 
-            board={game.state.board}
-            gameActive={game.state.gameActive}
+            board={gameState.board}
+            gameActive={gameState.gameActive}
           />
 
           {/* Game Status */}
           <GameStatus 
-            gameState={game.state}
+            gameState={gameState}
           />
 
           {/* Game Controls */}
@@ -65,6 +75,13 @@ export default function Game() {
           <GameInstructions />
         </div>
       </div>
+      
+      {isGitHubPages && (
+        <div className="mt-8 text-center text-sm text-gray-500">
+          <p>Running in standalone mode for GitHub Pages deployment.</p>
+          <p>No server connection required - all game logic runs in your browser!</p>
+        </div>
+      )}
     </div>
   );
 }
