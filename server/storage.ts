@@ -60,23 +60,48 @@ export class MemStorage implements IStorage {
     return game;
   }
 
+  /**
+   * Check if there's a winning condition on the board
+   * 
+   * This function checks all possible winning combinations (rows, columns, diagonals)
+   * for the 5x5 grid to see if any player has 5 in a row
+   * 
+   * @param board - The current game board state
+   * @returns The player index who won, or null if no winner
+   */
   checkForWin(board: (number | null)[]): number | null {
+    // Loop through each possible winning combination
     for (const combo of WINNING_COMBINATIONS) {
+      // Destructure the indices for the 5 positions to check
       const [a, b, c, d, e] = combo;
+      
+      // Check if all 5 positions have the same player's marker (not null)
+      // and that they all match the first position's value
       if (
-        board[a] !== null &&
-        board[a] === board[b] &&
-        board[a] === board[c] &&
-        board[a] === board[d] &&
-        board[a] === board[e]
+        board[a] !== null &&       // First position is not empty
+        board[a] === board[b] &&   // Second position matches first
+        board[a] === board[c] &&   // Third position matches first
+        board[a] === board[d] &&   // Fourth position matches first
+        board[a] === board[e]      // Fifth position matches first
       ) {
+        // Return the player index who made the winning move
         return board[a];
       }
     }
+    // If no winning combination is found, return null
     return null;
   }
 
+  /**
+   * Check if the game is a draw
+   * 
+   * A draw occurs when all cells are filled but no player has won
+   * 
+   * @param board - The current game board state
+   * @returns true if the game is a draw, false otherwise
+   */
   checkForDraw(board: (number | null)[]): boolean {
+    // If every cell is filled (not null), it's a draw
     return board.every(cell => cell !== null);
   }
 }

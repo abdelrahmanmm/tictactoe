@@ -58,21 +58,35 @@ export const PLAYERS: Player[] = [
   { id: 3, symbol: "□", color: "#F59E0B", name: "Player 4" }, // Amber
 ];
 
+// Winning combinations for 5x5 grid
+// These represent all possible winning alignments (5 in a row)
 export const WINNING_COMBINATIONS: number[][] = [
-  // Rows
-  [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24],
-  // Columns
-  [0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24],
-  // Diagonals
-  [0, 6, 12, 18, 24], [4, 8, 12, 16, 20]
+  // Rows - horizontal winning combinations (5 rows)
+  [0, 1, 2, 3, 4],       // First row
+  [5, 6, 7, 8, 9],       // Second row
+  [10, 11, 12, 13, 14],  // Third row
+  [15, 16, 17, 18, 19],  // Fourth row
+  [20, 21, 22, 23, 24],  // Fifth row
+  
+  // Columns - vertical winning combinations (5 columns)
+  [0, 5, 10, 15, 20],    // First column
+  [1, 6, 11, 16, 21],    // Second column
+  [2, 7, 12, 17, 22],    // Third column
+  [3, 8, 13, 18, 23],    // Fourth column
+  [4, 9, 14, 19, 24],    // Fifth column
+  
+  // Diagonals - only 2 diagonal winning combinations on a 5x5 grid
+  [0, 6, 12, 18, 24],    // Top-left to bottom-right diagonal
+  [4, 8, 12, 16, 20]     // Top-right to bottom-left diagonal
 ];
 
+// Initial game state for a new game
 export const INITIAL_GAME_STATE: GameState = {
-  board: Array(25).fill(null),
-  currentPlayerIndex: 0,
-  gameActive: true,
-  winner: null,
-  isDraw: false,
+  board: Array(25).fill(null),  // 5x5 grid = 25 cells, all initially empty (null)
+  currentPlayerIndex: 0,        // First player (Player 1) starts the game
+  gameActive: true,             // Game is active at the start
+  winner: null,                 // No winner at the start
+  isDraw: false,                // Not a draw at the start
 };
 
 export const INITIAL_SCORES = [0, 0, 0, 0];
