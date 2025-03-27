@@ -22,19 +22,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // WebSocket connections map (gameId -> list of connections)
   const connections = new Map<number, WebSocket[]>();
   
-  // Create initial game (for demo purposes)
+  /**
+   * Create initial game on server startup
+   * 
+   * This ensures there's always a game with ID 1 available for clients to join
+   * which improves the user experience by eliminating the need for explicit game creation.
+   * The initialization code checks if a game already exists before creating a new one
+   * to prevent duplicate games when the server restarts.
+   */
   console.log('Initializing a default game...');
   try {
-    // Check if game 1 exists, if not create it
+    // Check if game with ID 1 already exists in storage
     const existingGame = await storage.getGame(1);
     if (!existingGame) {
+      // Create a new default game if none exists
       console.log('Creating initial game with ID 1...');
       await storage.createGame();
       console.log('Initial game created successfully!');
     } else {
+      // Use existing game if available
       console.log('Game with ID 1 already exists, using existing game');
     }
   } catch (err) {
+    // Log any errors during initialization
     console.error('Error creating initial game:', err);
   }
   
@@ -75,11 +85,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Associate this connection with the game
             (ws as any).gameId = game.id;
             
-            // Send game state to the client
-            // Convert state to gameState for client compatibility
+            /**
+             * Prepare game state to send to the client
+             * 
+             * We add a "gameState" property that's a copy of the "state" property.
+             * This dual-format approach ensures compatibility with both:
+             * 1. The normal server setup where clients expect "state"
+             * 2. The GitHub Pages static version where clients expect "gameState"
+             * 
+             * This allows the same client code to work in both environments without modification.
+             */
             const clientGame = {
               ...game,
-              gameState: game.state // Add this for GitHub Pages compatibility
+              gameState: game.state // Add gameState property for GitHub Pages compatibility
             };
             ws.send(JSON.stringify({ 
               type: 'game_state', 
@@ -157,10 +175,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const gameConnections = connections.get(moveGameId) || [];
             gameConnections.forEach((conn) => {
               if (conn.readyState === WebSocket.OPEN) {
-                // Convert state to gameState for client compatibility
+                /**
+                 * Prepare updated game state for client
+                 * 
+                 * We maintain the dual-format (state and gameState properties)
+                 * for compatibility with both server and GitHub Pages environments.
+                 * We also handle the case where updatedGame might be undefined.
+                 */
                 const clientGame = updatedGame ? {
                   ...updatedGame,
-                  gameState: updatedGame.state // Add this for GitHub Pages compatibility
+                  gameState: updatedGame.state // Add gameState property for GitHub Pages compatibility
                 } : null;
                 conn.send(JSON.stringify({ 
                   type: 'game_state', 
@@ -201,10 +225,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const restartConnections = connections.get(restartGameId) || [];
             restartConnections.forEach((conn) => {
               if (conn.readyState === WebSocket.OPEN) {
-                // Convert state to gameState for client compatibility
+                /**
+                 * Prepare restarted game state for client
+                 * 
+                 * We maintain the dual-format (state and gameState properties)
+                 * for compatibility with both server and GitHub Pages environments.
+                 * We also handle the case where restartedGame might be undefined.
+                 */
                 const clientGame = restartedGame ? {
                   ...restartedGame,
-                  gameState: restartedGame.state // Add this for GitHub Pages compatibility
+                  gameState: restartedGame.state // Add gameState property for GitHub Pages compatibility
                 } : null;
                 conn.send(JSON.stringify({ 
                   type: 'game_state', 
