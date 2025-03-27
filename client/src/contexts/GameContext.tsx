@@ -63,11 +63,16 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     ws.onmessage = (event) => {
       try {
+        console.log("WebSocket message received:", event.data);
         const data = JSON.parse(event.data);
+        console.log("Parsed WebSocket data:", data);
         
         if (data.type === "gameState" && data.game) {
+          console.log("Setting game state:", data.game);
           setGame(data.game);
           setLoading(false);
+        } else {
+          console.log("Received message didn't match expected format");
         }
       } catch (err) {
         console.error("Error parsing WebSocket message:", err);

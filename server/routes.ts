@@ -37,14 +37,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     // Send the initial game state to new client
     if (defaultGameId) {
+      console.log(`Attempting to send initial game state for game ID: ${defaultGameId}`);
       storage.getGame(defaultGameId).then((game) => {
         if (game) {
-          ws.send(JSON.stringify({
+          console.log("Retrieved game data:", game);
+          const message = JSON.stringify({
             type: "gameState",
             game: game
-          }));
+          });
+          console.log("Sending message to client:", message);
+          ws.send(message);
+        } else {
+          console.log(`Game with ID ${defaultGameId} not found`);
         }
+      }).catch(err => {
+        console.error("Error retrieving game:", err);
       });
+    } else {
+      console.log("No default game ID available");
     }
 
     // Handle messages from clients
