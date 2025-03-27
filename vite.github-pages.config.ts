@@ -29,8 +29,8 @@ export default defineConfig({
     },
   },
   root: path.resolve(__dirname, "client"),
-  // Use relative paths for GitHub Pages
-  base: "./", 
+  // Use your actual repository name here for GitHub Pages
+  base: "/your-repo-name/", 
   build: {
     outDir: path.resolve(__dirname, "github-pages-build"),
     emptyOutDir: true,
